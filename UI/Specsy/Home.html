@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <!-- Include stylesheet -->
+    <link href="quill/quill.snow.css" rel="stylesheet" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Specsy.css" rel="stylesheet" />
+    <!-- Create the editor container -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-10 col-lg-10 mx-auto">
+                <div class="card card-signin my-5">
+                    <!--<img  src="..." alt="Card image cap">-->
+                    <div class="card-title text-center">
+                        <img class="card-img-top mx-auto d-block w-25" src="Logo2.png" />
+                    </div>
+                    
+                    <div class="card-body">
+                        <!--<h5 class="card-title text-center">Sign In</h5>-->
+                        <form class="form-signin">
+                            <div class="my-3">
+                                <div id="editor">
+                                    <p>Hello World!</p>
+                                    <p>Some initial <strong>bold</strong> text</p>
+                                    <p><br></p>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-label-group">
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <label for="inputEmail">Email address</label>
+            </div>
+
+            <div class="form-label-group">
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <label for="inputPassword">Password</label>
+            </div>-->
+                            <!--<div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                <label class="custom-control-label" for="customCheck1">Remember password</label>
+            </div>-->
+                            <hr class="my-4">
+                            <div class="card rounded-lg">
+                                <h5 class="card-header bg-primary">Check Spam</h5>
+                                <div class="card-body">
+                                    <h5 class="card-title"><!--Special title treatment--></h5>
+                                    <p id="spamText" class="card-text">With supporting text below as a natural lead-in to additional content
+                                    
+                                    </p>
+                                    <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+                                </div>
+                            </div>
+                            <!--<button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+
+            <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</button>
+            <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="container">
+        <div class="row">
+            <div class="Absolute-Center is-Responsive">
+                <div id="logo-container"></div>
+                <div class="col-sm col-md col-md-offset-1">
+                    <div id="editor">
+                        <p>Hello World!</p>
+                        <p>Some initial <strong>bold</strong> text</p>
+                        <p><br></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <script src="Scripts/jquery-3.0.0.min.js"></script>
+    <script src="Scripts/popper.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <!-- Include the Quill library -->
+    <script src="quill/quill.js"></script>
+    <!-- Initialize Quill editor -->
+    <script>
+        var tempDelta
+        //var quill = new Quill('#editor', {
+        //  theme: 'snow'
+        //      });
+
+        var quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['image', 'code-block']
+                ]
+            },
+            placeholder: 'Compose an epic...',
+            theme: 'snow'  // or 'bubble'
+        });
+
+        quill.format('color', 'red');
+
+        var getAllTextFromDelta = function (ops) {
+            var str = ''
+            ops.forEach(function (op) {
+                if (op.hasOwnProperty('insert'))
+                    str = str.concat(op.insert)
+
+            });
+            return str
+        }
+
+        quill.on('text-change', function (delta, oldDelta, source) {
+            if (source == 'api') {
+                console.log("An API call triggered this change.");
+            } else if (source == 'user') {
+                tempDelta = delta
+                console.log(delta)
+
+                if (delta.ops[0].hasOwnProperty('retain') && delta.ops[1].hasOwnProperty('insert')) {
+                    if (delta.ops[1].insert == ".") {
+                        var text = quill.getText()
+                        varLastPrd = text.lastIndexOf(".")
+                        var prevPeriod = text.lastIndexOf(".", varLastPrd - 1)
+
+                        if (prevPeriod != -1) {
+                            newTxt = text.substring(prevPeriod, varLastPrd + 1)
+                            newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                            formattedtext = "<mark>" + newTxt + "</mark>"
+                            $("#spamText").append(formattedtext)
+                            //$('p:empty').remove();
+                            ////$("#spamText").html(newhtmlText)
+                            //$("#spamText").html(text)
+
+                        } else {
+                            text = text.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                            $("#spamText").html(text)
+                        }
+                    }
+                } else {
+                    text = getAllTextFromDelta(delta.ops);
+                    text = text.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                    $("#spamText").html(text)
+                }
+
+            }
+        });
+
+    </script>
+</body>
+</html>
