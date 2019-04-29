@@ -16,18 +16,16 @@
             <div class="col-sm-6 col-md-10 col-lg-10 mx-auto">
                 <div class="card card-signin my-5">
                     <!--<img  src="..." alt="Card image cap">-->
-                    <div class="card-title text-center">
+                    <div class="text-center">
                         <img class="card-img-top mx-auto d-block w-25" src="Logo2.png" />
                     </div>
                     
                     <div class="card-body">
-                        <!--<h5 class="card-title text-center">Sign In</h5>-->
+                        <!--<h5 class="card-title">Enter your text</h5>-->
                         <form class="form-signin">
-                            <div class="my-3">
+                            <div id="scrolling-container" class="my-3">
                                 <div id="editor">
-                                    <p>Hello World!</p>
-                                    <p>Some initial <strong>bold</strong> text</p>
-                                    <p><br></p>
+
                                 </div>
                             </div>
 
@@ -46,11 +44,27 @@
             </div>-->
                             <hr class="my-4">
                             <div class="card rounded-lg">
-                                <h5 class="card-header bg-primary">Check Spam</h5>
-                                <div class="card-body">
+                                <div class="card-header bg-primary">
+                                    Check Spam
+                                    <div class="float-right">
+                                        <i class="fa fa-bell" aria-hidden="true"></i>
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-google dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" >
+                                                Models
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">Bayesian</a>
+                                                <a class="dropdown-item" href="#">SVM</a>
+                                                <a class="dropdown-item" href="#">NN</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<h5 class="card-header bg-primary">Check Spam</h5>-->
+                                <div class="card-body " style="min-height: 200px;">
                                     <h5 class="card-title"><!--Special title treatment--></h5>
-                                    <p id="spamText" class="card-text">With supporting text below as a natural lead-in to additional content
-                                    
+                                    <p id="spamText" class="card-text">
+                                        <i style="color: #8d939a;">Spam Text</i>
                                     </p>
                                     <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
                                 </div>
@@ -65,22 +79,6 @@
             </div>
         </div>
     </div>
-
-    <!--<div class="container">
-        <div class="row">
-            <div class="Absolute-Center is-Responsive">
-                <div id="logo-container"></div>
-                <div class="col-sm col-md col-md-offset-1">
-                    <div id="editor">
-                        <p>Hello World!</p>
-                        <p>Some initial <strong>bold</strong> text</p>
-                        <p><br></p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>-->
 
     <script src="Scripts/jquery-3.0.0.min.js"></script>
     <script src="Scripts/popper.min.js"></script>
@@ -102,11 +100,10 @@
                     ['image', 'code-block']
                 ]
             },
-            placeholder: 'Compose an epic...',
+            scrollingContainer: '#scrolling-container', 
+            placeholder: 'Enter your text here to check spam',
             theme: 'snow'  // or 'bubble'
         });
-
-        quill.format('color', 'red');
 
         var getAllTextFromDelta = function (ops) {
             var str = ''
