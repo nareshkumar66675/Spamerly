@@ -6,20 +6,20 @@ from sklearn.model_selection import train_test_split
 
 
 def preprocess_text(text):
-    
-    cleaned_text=re.sub('[^a-z\s]+',' ',text,flags=re.IGNORECASE) 	
-    cleaned_text=re.sub('(\s+)',' ',cleaned_text) 					
-    cleaned_text=cleaned_text.lower() 								
-    
-    return cleaned_text 											
+
+    cleaned_text=re.sub('[^a-z\s]+',' ',str(text),flags=re.IGNORECASE)
+    cleaned_text=re.sub('(\s+)',' ',cleaned_text) 
+    cleaned_text=cleaned_text.lower() 
+
+    return cleaned_text 										
 
 
 
 class BayesianAlgorithm:
-    
-    def __init__(self,unique_classes):
+
+    def __init__(self,unique_labels):
         
-        self.classes=unique_classes 
+        self.class_labels=unique_labels 
         
 
     def addToBagofWords(self,data_values,dict_index):
@@ -31,17 +31,17 @@ class BayesianAlgorithm:
             self.BagofWords_dicts[dict_index][token_word]+=1 
             
     def train(self,dataset,labels):
-    
+
         self.data_valuess=dataset
         self.labels=labels
-        self.BagofWords_dicts=np.array([defaultdict(lambda:0) for index in range(self.classes.shape[0])])
+        self.BagofWords_dicts=np.array([defaultdict(lambda:0) for index in range(self.class_labels.shape[0])])
         
-
         
         if not isinstance(self.data_valuess,np.ndarray): self.data_valuess=np.array(self.data_valuess)
         if not isinstance(self.labels,np.ndarray): self.labels=np.array(self.labels)
             
-        for cat_index,cat in enumerate(self.classes):
+
+        for cat_index,cat in enumerate(self.class_labels):
           
             all_cat_data_valuess=self.data_valuess[self.labels==cat] 
             
@@ -50,116 +50,105 @@ class BayesianAlgorithm:
             
             cleaned_data_valuess=pd.DataFrame(data=cleaned_data_valuess)
             
-
             np.apply_along_axis(self.addToBagofWords,1,cleaned_data_valuess,cat_index)
             
       
-        prob_classes=np.empty(self.classes.shape[0])
+        prob_labels=np.empty(self.class_labels.shape[0])
         all_words=[]
-        cat_word_counts=np.empty(self.classes.shape[0])
-        for cat_index,cat in enumerate(self.classes):
+        cat_word_counts=np.empty(self.class_labels.shape[0])
+        for cat_index,cat in enumerate(self.class_labels):
            
-            prob_classes[cat_index]=np.sum(self.labels==cat)/float(self.labels.shape[0]) 
+            prob_labels[cat_index]=np.sum(self.labels==cat)/float(self.labels.shape[0]) 
             
             count=list(self.BagofWords_dicts[cat_index].values())
             cat_word_counts[cat_index]=np.sum(np.array(list(self.BagofWords_dicts[cat_index].values())))+1 
-                                     
+                                         
             all_words+=self.BagofWords_dicts[cat_index].keys()
                                                      
-        
+
         self.vocab=np.unique(np.array(all_words))
         self.vocab_length=self.vocab.shape[0]
-                                                                   
-        denoms=np.array([cat_word_counts[cat_index]+self.vocab_length+1 for cat_index,cat in enumerate(self.classes)])                                                                          
+                                  
+                                   
+        denoms=np.array([cat_word_counts[cat_index]+self.vocab_length+1 for cat_index,cat in enumerate(self.class_labels)])                                                                          
       
         
-        self.cats_info=[(self.BagofWords_dicts[cat_index],prob_classes[cat_index],denoms[cat_index]) for cat_index,cat in enumerate(self.classes)]                               
+        self.cats_info=[(self.BagofWords_dicts[cat_index],prob_labels[cat_index],denoms[cat_index]) for cat_index,cat in enumerate(self.class_labels)]                               
         self.cats_info=np.array(self.cats_info)                                 
                                               
                                               
-    def getdata_valuesProb(self,test_data_values):                                
+    def single_text_prob(self,test_data_values):                                
                                       
                                               
-        likelihood_prob=np.zeros(self.classes.shape[0]) 
+        likelihood_prob=np.zeros(self.class_labels.shape[0]) 
         
-        for cat_index,cat in enumerate(self.classes): 
+        for cat_index,cat in enumerate(self.class_labels): 
                              
             for test_token in test_data_values.split(): 
-                                                                                                                         
+                                                                     
                 test_token_counts=self.cats_info[cat_index][0].get(test_token,0)+1
-                                      
+                                         
                 test_token_prob=test_token_counts/float(self.cats_info[cat_index][2])                              
                 
                 likelihood_prob[cat_index]+=np.log(test_token_prob)
                                               
-        post_prob=np.empty(self.classes.shape[0])
-        for cat_index,cat in enumerate(self.classes):
+        post_prob=np.empty(self.class_labels.shape[0])
+        for cat_index,cat in enumerate(self.class_labels):
             post_prob[cat_index]=likelihood_prob[cat_index]+np.log(self.cats_info[cat_index][1])                                  
       
         return post_prob
-    
-   
+
+
     def test(self,test_set):
            
        
         predictions=[] 
         for data_values in test_set: 
-                                                                           
+                                                                          
             cleaned_data_values=preprocess_text(data_values) 
-                                        
-            post_prob=self.getdata_valuesProb(cleaned_data_values) 
+                                            
+            post_prob=self.single_text_prob(cleaned_data_values) 
             
-            predictions.append(self.classes[np.argmax(post_prob)])
+            predictions.append(self.class_labels[np.argmax(post_prob)])
                 
         return np.array(predictions)
 
 
 
-def main():
+def bayesian_model(text):
 
-    training_set=pd.read_csv('spam_data.csv') 
-    training_set['Label'] = training_set['Label'].map( {'spam': 1, 'not_spam': 0} ).astype(int)
-
-    print("Not Spam : ",(training_set.Label == 0).sum())
-    print("Spam : ", (training_set.Label == 1).sum())
+    training_set=pd.read_csv('SMSSpamCollection.csv') # reading the training data-set
+    training_set['Label'] = training_set['Label'].map( {'spam': 0, 'ham': 1} ).astype(int)
 
     y_train=training_set['Label'].values
     x_train=training_set['Text'].values
-    print ("Unique Classes: ",np.unique(y_train))
-    print ("Total Number of Training Examples: ",x_train.shape)
 
 
     train_data,test_data,train_labels,test_labels=train_test_split(x_train,y_train,shuffle=True,test_size=0.25,random_state=42,stratify=y_train)
-    classes=np.unique(train_labels)
+    labels=np.unique(train_labels)
 
 
-    nb=BayesianAlgorithm(classes)
-    print ("------------------Training In Progress------------------------")
-    print ("Training Examples: ",train_data.shape)
+    nb=BayesianAlgorithm(labels)
     nb.train(train_data,train_labels)
-    print ('------------------Training Completed-------------------------')
+
+    plabels=nb.test(test_data)
+    test_acc=np.sum(plabels==test_labels)/float(test_labels.shape[0])
 
 
-    pclasses=nb.test(test_data)
-    test_acc=np.sum(pclasses==test_labels)/float(test_labels.shape[0])
-    print ("Test Set Examples: ",test_labels.shape[0])
-    print ("Test Set Accuracy: ",test_acc)
+    # Testing on a string
+
+    #generating predictions....
+    plabels=nb.single_text_prob(text)
 
 
-    Xtest=["hey interest free xxx site 's ?"]
-
-    pclasses=nb.test(Xtest)
-
-
-    df=pd.DataFrame(data=np.column_stack([Xtest,pclasses]),columns=["review","spam"])
-
-    if(df.spam.values == 1):
-        print("SPAM!!!!!!")
+    if(plabels[1] > plabels[0]):
+        return 0
     else:
-        print("NOT SPAM!!!!")
-		
+        if(plabels[0] >= -74.59):
+            return 1
+        elif(plabels[0] < -74.59 and plabels[0] >= -179.59):
+            return 2
+        else:
+            return 3
 
-
-if __name__ == "__main__":
-    main()
 
