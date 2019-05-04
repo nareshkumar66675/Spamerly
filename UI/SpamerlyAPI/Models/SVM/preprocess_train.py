@@ -181,5 +181,5 @@ def set_test_word_attributes(test_df,word_attributes_list):
                 att_values1.append(1)
             else:
                 att_values1.append(0)
-        test_df[k]=att_values1
+        test_df[feature]=att_values1
     return(test_df)

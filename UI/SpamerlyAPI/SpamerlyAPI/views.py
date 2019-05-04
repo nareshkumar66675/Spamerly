@@ -9,6 +9,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from json import dumps
 from flask.ext.jsonpify import jsonify
+from random import randint
 #@app.route('/')
 #@app.route('/home')
 #def home():
@@ -43,7 +44,7 @@ api = Api(app)
 class CheckSpam(Resource):
     def get(self, text):
 
-        result = {'Test':text}
+        result = {'SpamCode':randint(0,3)}
         return jsonify(result)
 
-api.add_resource(CheckSpam, '/CheckSpam/<text>') # Route_3w
+api.add_resource(CheckSpam, '/CheckSpam/<text>')

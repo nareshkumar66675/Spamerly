@@ -26,6 +26,8 @@ def main():
     pred_col=[]
     weight_opt_list=[]
     b_list=[]
+    word_attributes_list=[]
+    word_attributes_list1=[]
     word_occurance_dict={}
     df = pd.DataFrame(columns=['Text','Label'])
     text_list,label_list, ind_list,spam_count,non_spam_count= pre.create_dataframe()
@@ -45,19 +47,19 @@ def main():
     IG_dict=pre.get_Information_gain(spam_count,non_spam_count, word_occurance_dict,df)
     train_df=pre.set_word_attributes(IG_dict,df)
     word_attributes_list=list(train_df.columns.values)
-    word_attributes_list=word_attributes_list[5:]
+    word_attributes_list1=word_attributes_list[5:]
     features = np.array(word_attributes_list)
     l= train_df['Label'].tolist()
     Y = np.array(l)
     X =train_df[train_df.columns[5:]]
     X=np.array(X)
     weight_opt_list,b_list=svm.svm_training(X,Y)
-    print("here")
-    print(len(weight_opt_list))
     weight_df = pd.DataFrame(weight_opt_list)
     weight_df.to_csv('weight_opt_list.csv',index=False)
     b_list_df = pd.DataFrame(b_list)
     b_list_df.to_csv('b_list.csv',index=False)
+    feature_list_df = pd.DataFrame(word_attributes_list)
+    feature_list_df.to_csv('features.csv',index=False)
   #  np.savetxt("weight_opt_list.csv", weight_opt_list, delimiter=",")
   #  np.savetxt("b_list.csv", b_list, delimiter=",")
    # np.savetxt("features.csv", features, delimiter=",")

@@ -17,6 +17,7 @@
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
     <Name>SpamerlyAPI</Name>
     <RootNamespace>SpamerlyAPI</RootNamespace>
+    <WebBrowserPort>7657</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,11 +29,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models\Bayesian\bayesian.py" />
+    <Compile Include="Models\consolidated.py" />
     <Compile Include="Models\SVM\preprocess_train.py" />
     <Compile Include="Models\SVM\svm_cls.py" />
     <Compile Include="Models\SVM\svm_predict.py" />
     <Compile Include="Models\SVM\svm_train.py" />
     <Compile Include="runserver.py" />
+    <Compile Include="SpamerlyAPI.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SpamerlyAPI\API.py">
       <SubType>Code</SubType>
     </Compile>
@@ -58,6 +63,7 @@
     <Content Include="Models\spam_data.csv" />
     <Content Include="Models\SVM\.gitkeep" />
     <Content Include="Models\SVM\b_list.csv" />
+    <Content Include="Models\SVM\features.csv" />
     <Content Include="Models\SVM\weight_opt_list.csv" />
     <Content Include="requirements.txt" />
     <Content Include="SpamerlyAPI\static\content\bootstrap.css" />
