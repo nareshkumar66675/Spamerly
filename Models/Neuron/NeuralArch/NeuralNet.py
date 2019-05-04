@@ -43,7 +43,9 @@ class NeuralNet(object):
     def calculateAccuracy(self, actual, predicted):
         correct = 0
         for i in range(len(actual)):
+            print(actual[i])
             if actual[i] == predicted[i]:
+                
                 correct += 1
         return correct / float(len(actual)) * 100.0
 
@@ -74,7 +76,9 @@ class NeuralNet(object):
                 activation = self.activateNeuron(neuron['values'], inputs)
                 neuron['output'] = self.sigmoid(activation)
                 new_inputs.append(neuron['output'])
+
             inputs = new_inputs
+            #print(inputs)
         return inputs
 
     # Backward Propagation - Calculate loss
@@ -100,20 +104,23 @@ class NeuralNet(object):
     # Predict based on the model and data
     def predict(self, layers, row):
         outputs = self.forwardPropagate(layers, row)
+        #print(self.forwardPropagate(layers, row))
         return outputs.index(max(outputs))
 
     # Trains a model based on the passed data
     def trainModel(self, train, learnRate, epochCount):
         for epoch in range(epochCount):
+            #print(epoch)
             for row in train:
                 outputs = self.forwardPropagate(self.layers, row)
                 expected = [0 for i in range(self.outputCount)]
+                #print(expected)
                 val = row[-1]
                 expected[int(val)] = 1
                 self.backwardPropagate(self.layers, expected)
                 self.updateWeights(self.layers, row, learnRate)
                 break
-
+        #print(self.layers)
         return self.layers
 
     # Tests model and returns accuracy based on the model and test data

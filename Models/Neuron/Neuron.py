@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 from collections import defaultdict
 from NeuralArch.NeuralNet import *
+import pickle
 import seaborn as sns;
 sns.set()
 
@@ -47,13 +48,13 @@ def GetLearningRate(selectedDF,X_train,X_test,y_test ):
     # return 0.3
     lRateAccuracy = {}
     for lRate in range(1,10):
-            net = NeuralNet(len(selectedDF.columns)-1,len(selectedDF.columns)-1,1,len(selectedDF.iloc[:,-1].unique()))
+            net = NeuralNet(np.size(X_train,1)-1,1000,1,2)
 
-            model = net.trainModel(X_train.values,lRate/10,20)
+            model = net.trainModel(X_train.tolist(),lRate/10,20)
 
-            pred = net.testModel(X_test.values, model)
+            pred = net.testModel(X_test.tolist(), model)
 
-            accuracy = net.calculateAccuracy(y_test.values,pred)
+            accuracy = net.calculateAccuracy(y_test.tolist(),pred)
 
             print("For Learning Rate : {0} the Prediction Rate is {1}%".format(lRate/10,"{0:.2f}".format(accuracy)))
 
@@ -125,7 +126,7 @@ def GetOptimalHiddenLayers(selectedDF,X_train,X_test,y_test,lRate,epoch ):
     return max(hiddenLayerAccuracy, key=hiddenLayerAccuracy.get)
 
 
-testFilePath = r"C:\Users\kumar\Downloads\smsspamcollection\SMSSpamCollection"
+testFilePath = r"/Users/sandips/Desktop/Spamerly/Models/Neuron/DataSet/SMSSpamCollection"
 textDF = pd.read_csv(testFilePath,sep='\t',header=None)
 
 ## Reorder Decision Attribute for consistency
@@ -151,26 +152,45 @@ X_train, X_test, y_train, y_test = train_test_split(
 features, textDF[0], random_state=42)
 
 
-y_train = y_train.values.reshape(y_train.size,1)
-X_train = np.concatenate((X_train, y_train), 1)
+
+y_trainShaped = y_train.values.reshape(y_train.size,1)
+X_train = np.concatenate((X_train, y_trainShaped), 1)
 
 #X_train.loc[:,len(textDF.columns)] = y_train
 #X_test.loc[:,len(textDF.columns)] = y_test
 
-y_test = y_test.values.reshape(y_test.size,1)
-X_test = np.concatenate((X_test, y_test), 1)
+y_testShaped = y_test.values.reshape(y_test.size,1)
+X_test = np.concatenate((X_test, y_testShaped), 1)
 
-net = NeuralNet(np.size(X_train,1)-1,10,1,2)
 
-model = net.trainModel(X_train.tolist(),0.3,5)
 
+#print("Finding Best Optimal Learning Rate")
+#optimalLearningRate = GetLearningRate(textDF,X_train, X_test,y_test )
+#print("Optimal Learning Rate '{0}'".format(optimalLearningRate))
+
+
+net = NeuralNet(np.size(X_train,1)-1,1500,1,2)
+
+model = net.trainModel(X_train.tolist(),0.1,100)
+
+pickle.dump(model, open("save1.p", "wb"))
+
+#with open('save.p', 'rb') as handle:
+#    model = pickle.load(handle)
+
+#pred = net.testModel(X_test[:2,:].tolist(), model)
 pred = net.testModel(X_test.tolist(), model)
 
+
+
+#print(pred)
+
+#accuracy = net.calculateAccuracy(y_test[:2].tolist(),pred)
 accuracy = net.calculateAccuracy(y_test.tolist(),pred)
 
-print("Prediction Rate '{0}'".format("{0:.2f}".format(accuracy)))
+ print("Prediction Rate '{0}'".format("{0:.2f}".format(accuracy)))
 
-print("Prediction Rate" + accuracy)
+print(accuracy)
 
 #while True:
 #    print("Select DataSet")
@@ -226,26 +246,7 @@ print("Prediction Rate" + accuracy)
 
 #    #print("Prediction Rate" + accuracy)
 
-#    #lRateAccuracy = {}
-#    #for lRate in range(1,10):
-#    #        net = NeuralNet(len(selectedDF.columns)-1,10,1,len(selectedDF.iloc[:,-1].unique()))
 
-#    #        model = net.trainModel(X_train.values,lRate/10,20)
-
-#    #        pred = net.testModel(X_test.values, model)
-
-#    #        accuracy = net.calculateAccuracy(y_test.values,pred)
-
-#    #        lRateAccuracy[lRate/10] = accuracy
-
-#    #lists = sorted(lRateAccuracy.items()) # sorted by key, return a list of tuples
-
-#    #x, y = zip(*lists) # unpack a list of pairs into two tuples
-
-#    ##plt.plot(x, y)
-
-#    #sns.lineplot(x=x, y=y)
-#    #plt.show()
 
 #    #for i in lRateAccuracy:
 #    #    print(i, lRateAccuracy[i])
@@ -268,23 +269,3 @@ print("Prediction Rate" + accuracy)
 
 
 
-
-##categoricalColnsDF = testDF[['a1','a4','a5','a6','a8','a9','a11','a12']]
-##numericalColnsDF = testDF[['a2','a3','a7','a10','a13','a14']]
-
-
-### Encoding the variable
-##fit = categoricalColnsDF.apply(lambda x: dfLabelEncoder[x.name].fit_transform(x))
-
-### Inverse the encoded
-###fit.apply(lambda x: d[x.name].inverse_transform(x))
-
-### Using the dictionary to label future data
-###categoricalColnsDF = categoricalColnsDF.apply(lambda x: dfLabelEncoder[x.name].transform(x))
-
-
-
-##for x in numericalColnsDF.columns:
-##    categoricalColnsDF.loc[:,x] = numericalColnsDF[x]
-
-##categoricalColnsDF.loc[:,"class"] = testDF["class"]
