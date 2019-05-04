@@ -89,19 +89,18 @@ def svm_precit(weight_opt_list,X, b_list):
     b_list=np.array(b_list)
     for i in range(len(X)):
         pred = (weight_opt_list[i]*np.sum(X[i,:]))+(b_list[i])
-        print(pred)
         if pred > 0:
             if pred <=0.5:
-                Y_prob.append('High')
+                Y_prob.append(2)
             else:
-                Y_prob.append('Highest')
+                Y_prob.append(3)
             Y_predict.append(1)
             pred_col.append('1')
         if pred <= 0:
             if pred >(-0.5):
-                Y_prob.append('Medium')
+                Y_prob.append(1)
             else:
-                Y_prob.append('low')
+                Y_prob.append(0)
             Y_predict.append(0)
             pred_col.append('not-spam') 
     return(Y_predict,pred_col,Y_prob)
