@@ -49,7 +49,7 @@ quill.on('text-change', function (delta, oldDelta, source) {
                         newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>');
                         formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title='Disabled tooltip'>" + newTxt + "</mark>";
                         $("#spamText").append(formattedtext);
-                        $('[data-toggle="tooltip"]').tooltip()
+                        $('[data-toggle="tooltip"]').tooltip();
                     });
 
                     //$('p:empty').remove();
@@ -76,7 +76,7 @@ quill.on('text-change', function (delta, oldDelta, source) {
                         newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>');
                         formattedtext = "<mark class='highlight" + data.SpamCode + "' data-toggle='popover'  data-trigger='hover' data-content='Disabled popover'>" + newTxt + "</mark>";
                         $("#spamText").append(formattedtext);
-                        $('[data-toggle="tooltip"]').tooltip()
+                        $('[data-toggle="tooltip"]').tooltip();
                     });
             }
         } else {
@@ -107,8 +107,8 @@ quill.on('text-change', function (delta, oldDelta, source) {
 
 $(document).ready(function () {
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+        $('[data-toggle="tooltip"]').tooltip();
+    });
     $("#Bayesian").click(function (e) {
         //do something
         $("#dropdownMenuButton").text($(this).text());
