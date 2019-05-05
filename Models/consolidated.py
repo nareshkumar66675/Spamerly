@@ -1,4 +1,4 @@
-from svm_precit import *
+from svm_predict import *
 from bayesian import *
 
 
