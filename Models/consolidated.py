@@ -1,10 +1,10 @@
-from svm_predict import *
+from svm_new import *
 from bayesian import *
 
 
 def callFunction(text,name):
 	if name == "SVM":
-		return svm_model(text)
+		return svm_model_new(text)
 	elif name == "NN":
 		return nn_model(text)
 	elif name == "Bayesian":
