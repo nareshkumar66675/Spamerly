@@ -48,7 +48,7 @@ weight0 = 2 * np.random.random((dim1, dim2)) - 1
 weight1 = 2 * np.random.random((dim2, 1)) - 1
 
 
-for j in xrange(250):
+for j in xrange(10):
 
     layer_0 = X_train
     layer_1 = sigmoid(np.dot(layer_0,weight0))
@@ -125,4 +125,4 @@ layer_2x = sigmoid(np.dot(layer_1x,weight1))
 #     print("Spam")
 # else:
 #     print("Not Spam")
-print("Result : ", (layer_2x[0][0],80))
+print("Result : ", (layer_2x[0][0]))
