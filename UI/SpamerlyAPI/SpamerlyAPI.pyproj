@@ -28,12 +28,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Models\Bayesian\bayesian.py" />
-    <Compile Include="Models\consolidated.py" />
-    <Compile Include="Models\SVM\preprocess_train.py" />
-    <Compile Include="Models\SVM\svm_cls.py" />
-    <Compile Include="Models\SVM\svm_predict.py" />
-    <Compile Include="Models\SVM\svm_train.py" />
+    <Compile Include="Model\Bayesian\bayesian.py" />
+    <Compile Include="Model\consolidated.py" />
+    <Compile Include="Model\SVM\preprocess_train.py" />
+    <Compile Include="Model\SVM\svm_cls.py" />
+    <Compile Include="Model\SVM\svm_predict.py" />
+    <Compile Include="Model\SVM\svm_train.py" />
+    <Compile Include="Model\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="SpamerlyAPI.py">
       <SubType>Code</SubType>
@@ -45,10 +48,9 @@
     <Compile Include="SpamerlyAPI\views.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Models\Bayesian\" />
-    <Folder Include="Models\NN\" />
-    <Folder Include="Models\SVM\" />
+    <Folder Include="Model\" />
+    <Folder Include="Model\Bayesian\" />
+    <Folder Include="Model\SVM\" />
     <Folder Include="SpamerlyAPI\" />
     <Folder Include="SpamerlyAPI\static\" />
     <Folder Include="SpamerlyAPI\static\content\" />
@@ -57,14 +59,15 @@
     <Folder Include="SpamerlyAPI\templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\.gitkeep" />
-    <Content Include="Models\Bayesian\.gitkeep" />
-    <Content Include="Models\NN\.gitkeep" />
-    <Content Include="Models\spam_data.csv" />
-    <Content Include="Models\SVM\.gitkeep" />
-    <Content Include="Models\SVM\b_list.csv" />
-    <Content Include="Models\SVM\features.csv" />
-    <Content Include="Models\SVM\weight_opt_list.csv" />
+    <Content Include="Model\Bayesian\.gitkeep" />
+    <Content Include="Model\Bayesian\SMSSpamCollection.csv" />
+    <Content Include="Model\spam_data.csv" />
+    <Content Include="Model\SVM\.gitkeep" />
+    <Content Include="Model\SVM\b_list.csv" />
+    <Content Include="Model\SVM\features.csv" />
+    <Content Include="Model\SVM\SMSSpamCollection.csv" />
+    <Content Include="Model\SVM\test_SVM.txt" />
+    <Content Include="Model\SVM\weight_opt_list.csv" />
     <Content Include="requirements.txt" />
     <Content Include="SpamerlyAPI\static\content\bootstrap.css" />
     <Content Include="SpamerlyAPI\static\content\bootstrap.min.css" />

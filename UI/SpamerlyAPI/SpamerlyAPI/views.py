@@ -7,9 +7,12 @@ from flask import render_template
 from SpamerlyAPI import app
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_restful import reqparse
 from json import dumps
 from flask.ext.jsonpify import jsonify
 from random import randint
+
+from Model.consolidated import *
 #@app.route('/')
 #@app.route('/home')
 #def home():
@@ -40,11 +43,16 @@ from random import randint
 #        message='Your application description page.'
 #    )
 api = Api(app)
-
+#callFunction("hello","SVM")
+parser = reqparse.RequestParser()
+parser.add_argument('Model')
+parser.add_argument('Text')
 class CheckSpam(Resource):
-    def get(self, text):
+    def post(self):
+        args = parser.parse_args()
+        code = callFunction(args['Text'],args['Model'])
 
-        result = {'SpamCode':randint(0,3)}
+        result = {'SpamCode':code}
         return jsonify(result)
 
-api.add_resource(CheckSpam, '/CheckSpam/<text>')
+api.add_resource(CheckSpam, '/CheckSpam')

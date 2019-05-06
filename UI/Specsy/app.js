@@ -27,6 +27,7 @@ var getAllTextFromDelta = function (ops) {
 };
 
 quill.on('text-change', function (delta, oldDelta, source) {
+    model = $("#dropdownMenuButton").val();
     if (source === 'api') {
         //console.log("An API call triggered this change.");
     } else if (source === 'user') {
@@ -43,7 +44,10 @@ quill.on('text-change', function (delta, oldDelta, source) {
                     newTxt = text.substring(prevPeriod + 1, varLastPrd + 1);
 
                     $.ajax({
-                        url: "http://localhost:7657/CheckSpam/" + newTxt
+                        type: 'POST',
+                        url: "http://localhost:7657/CheckSpam",
+                        data: JSON.stringify({ Model: model, Text: newTxt }),
+                        contentType: "application/json; charset=utf-8",
                     }).then(function (data) {
 
                         newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>');
@@ -59,7 +63,10 @@ quill.on('text-change', function (delta, oldDelta, source) {
                 } else { //For the first entered line
 
                     $.ajax({
-                        url: "http://localhost:7657/CheckSpam/" + text
+                        type: 'POST',
+                        url: "http://localhost:7657/CheckSpam",
+                        data: JSON.stringify({ Model: model, Text: text }),
+                        contentType: "application/json; charset=utf-8",
                     }).then(function (data) {
 
                         text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
@@ -70,7 +77,10 @@ quill.on('text-change', function (delta, oldDelta, source) {
             } else if (delta.ops[1].insert.length > 1) { // For Copy single line
                     newTxt = delta.ops[1].insert;
                     $.ajax({
-                        url: "http://localhost:7657/CheckSpam/" + newTxt
+                        type: 'POST',
+                        url: "http://localhost:7657/CheckSpam",
+                        data: JSON.stringify({ Model: model, Text: newTxt }),
+                        contentType: "application/json; charset=utf-8",
                     }).then(function (data) {
 
                         newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>');
@@ -86,7 +96,10 @@ quill.on('text-change', function (delta, oldDelta, source) {
                 lines = text.split(".");
                 lines.forEach(function (line) {
                     $.ajax({
-                        url: "http://localhost:7657/CheckSpam/" + line
+                        type: 'POST',
+                        url: "http://localhost:7657/CheckSpam",
+                        data: JSON.stringify({ Model: model, Text: line }),
+                        contentType: "application/json; charset=utf-8",
                     }).then(function (data) {
 
                         line = line.replace(/(?:\r\n|\r|\n)/g, '<br>');
@@ -109,15 +122,55 @@ $(document).ready(function () {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
+
+    $("#dropdownMenuButton").text('Bayesian');
+    $("#dropdownMenuButton").val('Bayesian');
+
     $("#Bayesian").click(function (e) {
         //do something
         $("#dropdownMenuButton").text($(this).text());
         $("#dropdownMenuButton").val($(this).text());
+        text = getAllTextFromDelta(quill.getContents());
+        if (text.includes('.')) {
+            $("#spamText").empty();
+            lines = text.split(".");
+            lines.forEach(function (line) {
+                $.ajax({
+                    type: 'POST',
+                    url: "http://localhost:7657/CheckSpam",
+                    data: JSON.stringify({ Model: 'Bayesian', Text: line }),
+                    contentType: "application/json; charset=utf-8",
+                }).then(function (data) {
+
+                    line = line.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                    formattedtext = "<mark class='highlight" + data.SpamCode + "'>" + line + "</mark>";
+                    $("#spamText").append(formattedtext);
+                });
+            });
+        }
         e.preventDefault();
     });
     $("#SVM").click(function (e) {
         $("#dropdownMenuButton").text($(this).text());
         $("#dropdownMenuButton").val($(this).text());
+        text = getAllTextFromDelta(quill.getContents());
+        if (text.includes('.')) {
+            $("#spamText").empty();
+            lines = text.split(".");
+            lines.forEach(function (line) {
+                $.ajax({
+                    type: 'POST',
+                    url: "http://localhost:7657/CheckSpam",
+                    data: JSON.stringify({ Model: 'SVM', Text: line }),
+                    contentType: "application/json; charset=utf-8",
+                }).then(function (data) {
+
+                    line = line.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                    formattedtext = "<mark class='highlight" + data.SpamCode + "'>" + line + "</mark>";
+                    $("#spamText").append(formattedtext);
+                });
+            });
+        }
         e.preventDefault();
     });
     $("#NN").click(function (e) {

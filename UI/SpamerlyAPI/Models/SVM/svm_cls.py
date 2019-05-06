@@ -1,7 +1,5 @@
 import re
 import math
-from sklearn import metrics
-from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import numpy as np
 from cvxopt import matrix, solvers
@@ -68,11 +66,12 @@ def compute_bias(Lagrange_values,Y):
 #[x1,x2,x3.....xn][y2]
 #[x1,x2,x3.....xn][yn]
 def svm_training(X,Y):
+  #  clf.fit(X,Y)
     Y_predict=[]    
     Lagrange_values=[]
     weight_opt_list=[]
     b_list=[]
-    K= compute_dot_product(X,'poly_kernel')
+    K= compute_dot_product(X,'linear_kernel')
     Lagrange_values= compute_lagrange_multipliers(X,Y,K)
     #print(len(Lagrange_values))
     weight_opt_list= compute_opt_weights(Lagrange_values,X,Y)
@@ -80,28 +79,43 @@ def svm_training(X,Y):
     b_list= compute_bias(Lagrange_values,Y)
     #print(len(b_list))
     return (weight_opt_list,b_list)
-#Pediction part
+#Pediction part for Support vector machines
 def svm_precit(weight_opt_list,X, b_list):
     Y_predict=[]
     pred_col=[]
     Y_prob=[]
     weight_opt_list=np.array(weight_opt_list)
     b_list=np.array(b_list)
-    for i in range(len(X)):
-        pred = (weight_opt_list[i]*np.sum(X[i,:]))+(b_list[i])
-        print(pred)
-        if pred > 0:
+    #new_opt_weight =np.sum(weight_opt_list)
+ #   for i in range(len(X)):
+    #pred= clf.predict(X)
+    prev_weight=weight_opt_list[0]
+    for weight in weight_opt_list:
+        if (weight>0) and (weight <prev_weight):
+                    min_weight=weight
+        prev_weight=weight
+    prev_b=b_list[0]
+    for b in b_list:
+        if (b>0) and (b <prev_b):
+                    min_b=b
+        prev_b=b   
+    print(min_b)     
+    print(min_weight)
+    print(X)
+    print(np.sum(X))
+    pred = (min_weight*np.sum(X))+(min_b) #pred = np.sum(weight_opt_list)*np.sum(X)+np.sum(b_list)
+    if pred > 0:
             if pred <=0.5:
-                Y_prob.append('High')
+                Y_prob.append(2)
             else:
-                Y_prob.append('Highest')
+                Y_prob.append(3)
             Y_predict.append(1)
-            pred_col.append('1')
-        if pred <= 0:
+            pred_col.append(pred)
+    if pred <= 0:
             if pred >(-0.5):
-                Y_prob.append('Medium')
+                Y_prob.append(1)
             else:
-                Y_prob.append('low')
+                Y_prob.append(0)
             Y_predict.append(0)
-            pred_col.append('not-spam') 
+            pred_col.append(pred) 
     return(Y_predict,pred_col,Y_prob)
