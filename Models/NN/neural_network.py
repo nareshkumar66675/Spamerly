@@ -94,8 +94,8 @@ print("Accuracy : ", round(correct * 100.0 / len(layer_2)))
 # text = ["Oh k...i'm watching here"]
 # text = ["07732584351 - Rodger Burns - MSG = We tried to call you re your reply to our sms for a free nokia mobile + free camcorder. Please call now 08000930705 for delivery tomorrow"]
 text = ["As a valued customer"]
-tfidf = TfidfVectorizer(sublinear_tf=True, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english')
-Xtext = tfidf.fit_transform(text).toarray()
+
+Xtext = tfidf.transform(text).toarray()
 
 # print(len(weight0))
 # print(weight0)
@@ -103,6 +103,8 @@ Xtext = tfidf.fit_transform(text).toarray()
 # print(len(weight1))
 
 layer_0x = Xtext
+layer_1x = sigmoid(np.dot(layer_0x,weight0))
+layer_2x = sigmoid(np.dot(layer_1x,weight1))
 
 # print(Xtext)
 # print(len(layer_0x[0]))
@@ -112,9 +114,6 @@ layer_0x = Xtext
 
 # layer_1x = sigmoid(np.dot(layer_0x,sliced_weight))
 # layer_2x = sigmoid(np.dot(layer_1x,weight1))
-
-layer_1x = sigmoid(np.dot(layer_0x,weight0))
-layer_2x = sigmoid(np.dot(layer_1x,weight1))
 
 # def truncate(n, decimals=0):
 #     multiplier = 10 ** decimals
