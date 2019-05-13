@@ -17,7 +17,7 @@ Yeah!!!! It is a Rip off of Grammerly. But it is different.
 
 
 # Prediction Rate
-![PredictionRate](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/PredictionRate.png)
+![PredictionRate](Viz/PredictionRate.png)
 
 # Application Demo
 - It is a web application.
@@ -35,14 +35,14 @@ Yeah!!!! It is a Rip off of Grammerly. But it is different.
 | Red               | high          |
 
 
-![Demo1](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/BayesianDemo.gif)
+![Demo1](Viz/BayesianDemo.gif)
 
 #### Demo 2: Changing the model
 1) User can change the model by selecting the model from drop down.
 2) All the text entered will be updated using the new selected model.
 3) Additionally, if user hover over the highlighted text, the actual probability of the text being spam is shown.
 
-![enter image description here](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/SVMDemo.gif)
+![enter image description here](Viz/SVMDemo.gif)
 
 # Project Struture
 ##### Spamerly
@@ -57,6 +57,11 @@ Yeah!!!! It is a Rip off of Grammerly. But it is different.
 - **/Data Acquire** -  Retrieve spam data from Gmail 
 
 
+# Presentation
+
+[Link to PDF](Viz/Spamerly.pdf)
+
+[Link to PPT](Viz/Spamerly.pptx)
 
 
   
