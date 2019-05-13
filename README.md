@@ -25,7 +25,7 @@ Yeah!!!! It is a Rip off of Grammerly. But it is different.
 #### Demo 1: Entering the text and Checking for Spam
 1) Enter the text in the editor.
 2) For every senetence(identified by a *"period(.)"*) the spam is highlighted in the below block.
-3) Spam Levels:
+3) **Spam Levels:**
 
 | Highlighted Color | Spam Severity |
 |-------------------|---------------|
@@ -46,11 +46,16 @@ Yeah!!!! It is a Rip off of Grammerly. But it is different.
 
 # Project Struture
 ##### ExpMaxML
-- **RLearn.py** - Main Startup File. Contains QLearn Implementation
-- **Utils.py** - Various Utility Functions
-- **Map.py** - Contains the implementation of the treasure map. 
-##### Visuals
-- GIFs
+- **/Model**  - All Files related to Models
+	- NN 
+	- SVM
+	- Bayesian
+- **/UI** - All files related to creating the web Application
+	- SpamerlyAPI - API to get the spam probability from the models
+	- Specsy - UI for the app
+- **/Viz** - All Visualizations and Demo
+- **/Data Acquire** -  Retrieve spam data from Gmail 
+
 
 
 
