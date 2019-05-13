@@ -45,7 +45,7 @@ Yeah!!!! It is a Rip off of Grammerly. But it is different.
 ![enter image description here](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/SVMDemo.gif)
 
 # Project Struture
-##### ExpMaxML
+##### Spamerly
 - **/Model**  - All Files related to Models
 	- NN 
 	- SVM
