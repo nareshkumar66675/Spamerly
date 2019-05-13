@@ -1,0 +1,60 @@
+# Spamerly
+
+Yeah!!!! It is a Rip off of Grammerly. But it is different.
+
+
+# Overview
+
+  - This application helps the user to identify the spam while composing an article/email.
+  - So, the users need not worry that the mails will end up in the spam folder of the reciever.
+  - This helps the genuine/advertiser to evade spam filtration done by most services.
+
+# Classification Models:
+##### Bayesian
+##### Support Vector Machines
+##### Neural Network
+
+
+
+# Prediction Rate
+![PredictionRate](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/PredictionRate.png)
+
+# Application Demo
+- It is a web application.
+- User can enter the data and check for spam or not.
+#### Demo 1: Entering the text and Checking for Spam
+1) Enter the text in the editor.
+2) For every senetence(identified by a *"period(.)"*) the spam is highlighted in the below block.
+3) Spam Levels:
+
+| Highlighted Color | Spam Severity |
+|-------------------|---------------|
+| None              | Not a Spam    |
+| Grey              | Low           |
+| Yellow            | Medium        |
+| Red               | high          |
+
+
+![Demo1](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/BayesianDemo.gif)
+
+#### Demo 2: Changing the model
+1) User can change the model by selecting the model from drop down.
+2) All the text entered will be updated using the new selected model.
+3) Additionally, if user hover over the highlighted text, the actual probability of the text being spam is shown.
+
+![enter image description here](https://raw.githubusercontent.com/nareshkumar66675/Spamerly/master/Viz/SVMDemo.gif)
+
+# Project Struture
+##### ExpMaxML
+- **RLearn.py** - Main Startup File. Contains QLearn Implementation
+- **Utils.py** - Various Utility Functions
+- **Map.py** - Contains the implementation of the treasure map. 
+##### Visuals
+- GIFs
+
+
+
+  
+
+
+
