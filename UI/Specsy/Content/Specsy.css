@@ -144,3 +144,10 @@ br{
 .ql-editor {
     min-height:200px;
 }
+
+.tooltip-inner {
+    /*color: black;*/
+    text-align: center;
+    /*background-color: white;*/
+    border-radius: .75rem;
+}

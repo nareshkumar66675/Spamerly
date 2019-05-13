@@ -51,7 +51,7 @@ quill.on('text-change', function (delta, oldDelta, source) {
                     }).then(function (data) {
 
                         newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                        formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title='Disabled tooltip'>" + newTxt + "</mark>";
+                        formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title= 'Probability: " + data.Probability +"'>" + newTxt + "</mark>";
                         $("#spamText").append(formattedtext);
                         $('[data-toggle="tooltip"]').tooltip();
                     });
@@ -70,12 +70,15 @@ quill.on('text-change', function (delta, oldDelta, source) {
                     }).then(function (data) {
 
                         text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                        formattedtext = "<mark class='highlight" + data.SpamCode + "'>" + text + "</mark>";
+                        formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title='Probability: " + data.Probability + "'>" + text + "</mark>";
                         $("#spamText").html(formattedtext);
+                        $('[data-toggle="tooltip"]').tooltip();
                     });
                 }
             } else if (delta.ops[1].insert.length > 1) { // For Copy single line
-                    newTxt = delta.ops[1].insert;
+                newTxt = delta.ops[1].insert;
+                if (newTxt.includes('.')) {
+                    
                     $.ajax({
                         type: 'POST',
                         url: "http://localhost:7657/CheckSpam",
@@ -84,10 +87,11 @@ quill.on('text-change', function (delta, oldDelta, source) {
                     }).then(function (data) {
 
                         newTxt = newTxt.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                        formattedtext = "<mark class='highlight" + data.SpamCode + "' data-toggle='popover'  data-trigger='hover' data-content='Disabled popover'>" + newTxt + "</mark>";
+                        formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title='Probability: " + data.Probability+"'>" + newTxt + "</mark>";
                         $("#spamText").append(formattedtext);
                         $('[data-toggle="tooltip"]').tooltip();
                     });
+                }
             }
         } else {
             text = getAllTextFromDelta(delta.ops);
@@ -103,8 +107,9 @@ quill.on('text-change', function (delta, oldDelta, source) {
                     }).then(function (data) {
 
                         line = line.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                        formattedtext = "<mark class='highlight" + data.SpamCode + "'>" + line + "</mark>";
+                        formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title= 'Probability: " + data.Probability + "'>" + line + "</mark>";
                         $("#spamText").append(formattedtext);
+                        $('[data-toggle="tooltip"]').tooltip();
                     });
                 });
             }
@@ -143,8 +148,9 @@ $(document).ready(function () {
                 }).then(function (data) {
 
                     line = line.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                    formattedtext = "<mark class='highlight" + data.SpamCode + "'>" + line + "</mark>";
+                    formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title= 'Probability: " + data.Probability + "'>" + line + "</mark>";
                     $("#spamText").append(formattedtext);
+                    $('[data-toggle="tooltip"]').tooltip();
                 });
             });
         }
@@ -166,8 +172,9 @@ $(document).ready(function () {
                 }).then(function (data) {
 
                     line = line.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                    formattedtext = "<mark class='highlight" + data.SpamCode + "'>" + line + "</mark>";
+                    formattedtext = "<mark class='highlight" + data.SpamCode + "' tabindex='0' data-toggle='tooltip' title= 'Probability: " + data.Probability + "'>" + line + "</mark>";
                     $("#spamText").append(formattedtext);
+                    $('[data-toggle="tooltip"]').tooltip();
                 });
             });
         }

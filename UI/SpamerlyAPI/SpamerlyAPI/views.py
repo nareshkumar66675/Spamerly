@@ -43,16 +43,16 @@ from Model.consolidated import *
 #        message='Your application description page.'
 #    )
 api = Api(app)
-#callFunction("hello","SVM")
+callFunction("hello","SVM")
 parser = reqparse.RequestParser()
 parser.add_argument('Model')
 parser.add_argument('Text')
 class CheckSpam(Resource):
     def post(self):
         args = parser.parse_args()
-        code = callFunction(args['Text'],args['Model'])
+        code,prob = callFunction(args['Text'],args['Model'])
 
-        result = {'SpamCode':code}
+        result = {'SpamCode':code, 'Probability':prob}
         return jsonify(result)
 
 api.add_resource(CheckSpam, '/CheckSpam')

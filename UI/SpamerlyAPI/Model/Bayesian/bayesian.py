@@ -115,24 +115,36 @@ class BayesianAlgorithm:
         return np.array(predictions)
 
 
+training_set=pd.read_csv(r"C:\Users\kumar\OneDrive\Documents\Projects\Spamerly\UI\SpamerlyAPI\Model\SVM\SMSSpamCollection.csv") # reading the training data-set
+training_set['Label'] = training_set['Label'].map( {'spam': 0, 'ham': 1} ).astype(int)
 
+y_train=training_set['Label'].values
+x_train=training_set['Text'].values
+
+
+train_data,test_data,train_labels,test_labels=train_test_split(x_train,y_train,shuffle=True,test_size=0.25,random_state=42,stratify=y_train)
+labels=np.unique(train_labels)
+
+
+nb=BayesianAlgorithm(labels)
+nb.train(train_data,train_labels)
 def bayesian_model(text):
 
-    training_set=pd.read_csv(r"C:\Users\kumar\OneDrive\Documents\Projects\Spamerly\UI\SpamerlyAPI\Model\SVM\SMSSpamCollection.csv") # reading the training data-set
-    training_set['Label'] = training_set['Label'].map( {'spam': 0, 'ham': 1} ).astype(int)
+    #training_set=pd.read_csv(r"C:\Users\kumar\OneDrive\Documents\Projects\Spamerly\UI\SpamerlyAPI\Model\SVM\SMSSpamCollection.csv") # reading the training data-set
+    #training_set['Label'] = training_set['Label'].map( {'spam': 0, 'ham': 1} ).astype(int)
 
-    y_train=training_set['Label'].values
-    x_train=training_set['Text'].values
-
-
-    train_data,test_data,train_labels,test_labels=train_test_split(x_train,y_train,shuffle=True,test_size=0.25,random_state=42,stratify=y_train)
-    labels=np.unique(train_labels)
+    #y_train=training_set['Label'].values
+    #x_train=training_set['Text'].values
 
 
-    nb=BayesianAlgorithm(labels)
-    nb.train(train_data,train_labels)
+    #train_data,test_data,train_labels,test_labels=train_test_split(x_train,y_train,shuffle=True,test_size=0.25,random_state=42,stratify=y_train)
+    #labels=np.unique(train_labels)
 
-    plabels=nb.test(test_data)
+
+    #nb=BayesianAlgorithm(labels)
+    #nb.train(train_data,train_labels)
+
+    #plabels=nb.test(test_data)
     #test_acc=np.sum(plabels==test_labels)/float(test_labels.shape[0])
 
     #pickle.dump( nb, open( "bayesianModel.p", "wb" ) )
@@ -141,15 +153,16 @@ def bayesian_model(text):
     #generating predictions....
     plabels=nb.single_text_prob(text)
 
+    plabels[1]
 
     if(plabels[1] > plabels[0]):
-        return 0
+        return 0,round(plabels[1],2)
     else:
         if(plabels[0] >= -74.59):
-            return 1
-        elif(plabels[0] < -74.59 and plabels[0] >= -179.59):
-            return 2
+            return 1,round(plabels[0],2)
+        elif(plabels[0] < -74.59 and plabels[0] >= -149.59):
+            return 2,round(plabels[0],2)
         else:
-            return 3
+            return 3,round(plabels[0],2)
 
 

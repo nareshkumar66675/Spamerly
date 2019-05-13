@@ -42,6 +42,8 @@ def svm_model(text):
  #   full_test_df['Y_prob']=Y_prob
     return (Y_predict1,Y_prob1)
 #Predcition usin sklearn SVM model to verify and comare the prediction results
+
+clf,word_attributes_list1 = pickle.load(open( "svmModel.p", "rb" ))
 def svm_model_new(text):
     #sev_val=0.0
     #df=pd.read_csv(r"C:\Users\kumar\OneDrive\Documents\Projects\Spamerly\UI\SpamerlyAPI\Model\SVM\SMSSpamCollection.csv")
@@ -70,7 +72,7 @@ def svm_model_new(text):
     #pickle.dump([clf,word_attributes_list1],open( "svmModel.p", "wb" ) )
     test_df=pre.preprocess_test_data(text)
 
-    clf,word_attributes_list1 = pickle.load(open( "svmModel.p", "rb" ))
+
 
     #g=0
     #prob=0
@@ -93,14 +95,24 @@ def svm_model_new(text):
     
     #pred=clf.predict(X1)
     pred = clf.predict_proba(X1)
+    print(clf.classes_)
     prob = pred[0][1]
-    if prob > 0.1:
+    #if prob > 0.1:
+    #    sev_val=3
+    #elif prob < 0.1 and prob >=0.02:
+    #    sev_val=2
+    #elif prob < 0.02 and prob>=0.002:
+    #    sev_val=1
+    #elif prob < 0.002:
+    #    sev_val=0
+
+    if prob > 0.6:
         sev_val=3
-    elif prob < 0.1 and prob >=0.02:
+    elif prob < 0.6 and prob >=0.4:
         sev_val=2
-    elif prob < 0.02 and prob>=0.002:
+    elif prob < 0.4 and prob>=0.2:
         sev_val=1
-    elif prob < 0.002:
+    else:
         sev_val=0
 
-    return sev_val
+    return sev_val,round(prob,2)
